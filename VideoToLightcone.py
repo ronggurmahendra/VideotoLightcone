@@ -1,25 +1,46 @@
 import cv2
 # Var
-modName = 'TextureofMemories'
-videofilename = 'TextureofMemories.mp4'
-lightconeimagehash = 'e51c9baa'
+
+print('HONKAI STAR RAIL MOD SCRIPT - VIDEO TO LIGHTCONE')
+print('This Scripts Converts Video into pictures and config file for lightcone mods in honkai star rail')
+
+modName = input('Enter Mod Name(needs to be unique than other mods.... i think.... ) : ')
+while modName == '':
+	modName = input('Mod name cannot be empty. \n\
+	Enter Mod Name(needs to be unique than other mods.... i think) : ')
+
+videofilename = input('Enter file name e.g. sample.mp4 : ') 
+while videofilename == '':
+	modName = input('File cannot be empty. \n\
+	Enter file name e.g. sample.mp4 : ') 
+
+lightconeimagehash = input ("Enter Lightcone hash e.g. 89881665 for A Secret Vow (you can look up the hash in txt file in this folder) :")
+while lightconeimagehash == '':
+	lightconeimagehash = input('Hash cannot be empty. \n\
+	Enter Lightcone hash e.g. 89881665 for A Secret Vow (you can look up the hash in txt file in this folder) :') 
+
 # Param
-color = [178, 190, 181] # 'cause grey!
-top, bottom, left, right = [10]*4
+MIN_FRAMES = 15
+FRAME_COUNT = 15
+BORDER_COLOR = [178, 190, 181] # grey
+BORDER_WIDTH = 10
+top, bottom, left, right = [BORDER_WIDTH]*4
 
 vidcap = cv2.VideoCapture(videofilename)
 success,image = vidcap.read()
 total_frames = int(vidcap.get(cv2.CAP_PROP_FRAME_COUNT))
+fps = vidcap.get(cv2.CAP_PROP_FPS)
 print('total_frames', total_frames)
+
 count = 0
 frame_count = 0
-jump = min(int(total_frames / 15), 15)
+inc = min(int(total_frames / FRAME_COUNT), MIN_FRAMES)
 
 # make images
 while success and count < 15:
-    if frame_count % jump == 0:
+    if frame_count % inc == 0:
         image_rotated = cv2.rotate(image, cv2.ROTATE_180)
-        image_rotated_border = cv2.copyMakeBorder(image_rotated, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
+        image_rotated_border = cv2.copyMakeBorder(image_rotated, top, bottom, left, right, cv2.BORDER_CONSTANT, value=BORDER_COLOR)
         
         filename = modName+ str(count) + ".jpg" 
         # path = './'+modName+'/'+filename
